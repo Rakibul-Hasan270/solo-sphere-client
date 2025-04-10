@@ -1,8 +1,12 @@
 import React from 'react';
 import logo from '../../assets/images/logo.png'
 import { Link, NavLink } from 'react-router';
+import useAuth from '../../hooks/useAuth';
 
 const Navbar = () => {
+
+    const { logOut } = useAuth();
+
     const links = <div className='space-x-10'>
         <NavLink to='/'>Home</NavLink>
         <NavLink to='/signIn'>Login</NavLink>
@@ -34,7 +38,7 @@ const Navbar = () => {
                             </a>
                         </li>
                         <li><a>Settings</a></li>
-                        <li><a>Logout</a></li>
+                        <li><a onClick={logOut}>Logout</a></li>
                     </ul>
                 </div>
             </div>
