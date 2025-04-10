@@ -7,6 +7,10 @@ import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 import Slider from './Slider';
 
+import bg1 from '../../assets/images/carousel1.jpg'
+import bg2 from '../../assets/images/carousel2.jpg'
+import bg3 from '../../assets/images/carousel3.jpg'
+
 export default function Carousel() {
   return (
     <>
@@ -25,13 +29,13 @@ export default function Carousel() {
         className="mySwiper"
       >
         <SwiperSlide>
-            <Slider></Slider>
+            <Slider image={bg1} text={'Intrinsicly utilize market-driven web-readiness rather than synergistic initiatives.'}></Slider>
         </SwiperSlide>
         <SwiperSlide>
-            <Slider></Slider>
+            <Slider image={bg2} text={'Intrinsicly utilize market-driven web-readiness rather than synergistic initiatives.'}></Slider>
         </SwiperSlide>
         <SwiperSlide>
-            <Slider></Slider>
+            <Slider image={bg3} text={'Intrinsicly utilize market-driven web-readiness rather than synergistic initiatives.'}></Slider>
         </SwiperSlide>
       </Swiper>
     </>
