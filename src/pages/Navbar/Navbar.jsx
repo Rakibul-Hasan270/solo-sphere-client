@@ -5,7 +5,7 @@ import { Link, NavLink } from 'react-router';
 const Navbar = () => {
     const links = <div className='space-x-10'>
         <NavLink to='/'>Home</NavLink>
-        <NavLink to='/'>About</NavLink>
+        <NavLink to='/signIn'>Login</NavLink>
     </div>
     return (
         <div className="navbar bg-base-100 shadow-sm">
