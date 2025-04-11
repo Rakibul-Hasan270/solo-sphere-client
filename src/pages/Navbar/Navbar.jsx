@@ -32,13 +32,11 @@ const Navbar = () => {
                     <ul
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                        <li>
-                            <a className="justify-between">
-                                Profile
-                            </a>
-                        </li>
-                        <li><a>Settings</a></li>
-                        <li><a onClick={logOut}>Logout</a></li>
+                        <li> <Link to='/add-job'>Add Job</Link></li>
+                        <li> <Link to='/my-post-job'>My posted Job</Link></li>
+                        <li> <Link to='/my-bids'>My Bids</Link></li>
+                        <li> <Link to='/bid-request'>Bid Request</Link></li>
+                        <li> <Link to='/' onClick={logOut}>Log Out</Link></li>
                     </ul>
                 </div>
             </div>

@@ -16,12 +16,12 @@ const Register = () => {
         const photo = form.photo.value;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(name, photo, email, password)
+        // console.log(name, photo, email, password)
 
         try {
             const result = await createUser(email, password);
             navigate('/');
-            console.log(result)
+            // console.log(result)
             updateUserProfile(name, photo);
             setUser({ ...user, displayName: name, photoURL: photo })
             toast.success('Creating user successfully');

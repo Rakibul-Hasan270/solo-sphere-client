@@ -10,7 +10,7 @@ const CardTabs = () => {
     useEffect(() => {
         axios(`${import.meta.env.VITE_API_URL}/jobs`)
             .then(res => {
-                console.log(res.data);
+                // console.log(res.data);
                 setCardInfo(res.data);
             })
     }, [])
