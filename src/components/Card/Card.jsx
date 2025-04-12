@@ -18,10 +18,8 @@ const Card = ({ info }) => {
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 line-clamp-3">{description}</p>
 
                 <div className="mt-4 border-t pt-3 border-gray-200 dark:border-gray-700">
-                    <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Price Range</h3>
                     <div className="text-sm text-gray-800 dark:text-gray-200">
-                        <p>Min: <span className="font-semibold">${min_price}</span></p>
-                        <p>Max: <span className="font-semibold">${max_price}</span></p>
+                        <p>Range: <span className="font-semibold">${min_price}-${max_price}</span></p>
                     </div>
                 </div>
             </div>

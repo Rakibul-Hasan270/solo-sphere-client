@@ -23,8 +23,8 @@ const AddJob = () => {
         const min_price = parseFloat(form.min_price.value);
         const max_price = parseFloat(form.max_price.value);
         const description = form.description.value;
-        const jobInfo = { job_title, deadline, category, min_price, max_price, description, bayer: { email, name: user?.displayName, photo: user?.photoURL } };
-        console.table(jobInfo);
+        const jobInfo = { job_title, deadline, category, min_price, max_price, description, buyer: { email, name: user?.displayName, photo: user?.photoURL } };
+        console.table(jobInfo.buyer);
 
         try {
             axios.post(`${import.meta.env.VITE_API_URL}/addJob`, jobInfo);

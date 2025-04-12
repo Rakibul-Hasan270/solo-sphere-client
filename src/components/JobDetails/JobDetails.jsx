@@ -12,13 +12,14 @@ const JobDetails = () => {
     const navigate = useNavigate();
 
     const { user } = useAuth();
-    const { category, deadline, description, job_title, max_price, min_price, _id, buyer_email } = info;
+    const { category, deadline, description, job_title, max_price, min_price, _id, buyer } = info;
     const [startDate, setStartDate] = useState(new Date());
+    console.log(buyer)
 
     const handelFormSubmission = async event => {
-        if (user?.email === buyer_email) return toast.error('action not found');
-
         event.preventDefault();
+        // if (user?.email === buyer?.email) return toast.error('action not found');
+
         const form = event.target;
         const jobId = _id;
         const price = parseFloat(form.price.value);
@@ -38,9 +39,9 @@ const JobDetails = () => {
             toast.success('success transmission to server');
             navigate('/bid-request');
         } catch (error) {
-            toast.error(error?.message);
+            toast.error(error?.message,'error happend');
         }
-
+        console.log(456)
     }
 
     return (
@@ -68,14 +69,14 @@ const JobDetails = () => {
                     <div className='flex items-center gap-5'>
                         <div>
                             <p className='mt-2 text-sm  text-gray-600 '>
-                                {/* Name: {buyer?.name}      */}
+                                Name: {buyer?.name}
                             </p>
                             <p className='mt-2 text-sm  text-gray-600 '>
-                                Email: {buyer_email}
+                                Email: {buyer?.email}
                             </p>
                         </div>
                         <div className='rounded-full object-cover overflow-hidden w-14 h-14'>
-                            {/* <img src={buyer?.photo} alt='' /> */}
+                            <img src={buyer?.photo} alt='' />
                         </div>
                     </div>
                     <p className='mt-6 text-lg font-bold text-gray-600 '>
@@ -105,7 +106,7 @@ const JobDetails = () => {
 
                         <div>
                             <label className='text-gray-700 ' htmlFor='emailAddress'>
-                                Email Address
+                                Email
                             </label>
                             <input
                                 id='emailAddress'
