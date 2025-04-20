@@ -43,6 +43,11 @@ const router = createBrowserRouter([
                 element: <MyPostedJob></MyPostedJob>
             },
             {
+                path: '/update/:id',
+                element: <Update></Update>,
+                loader: ({ params }) => fetch(`${import.meta.env.VITE_API_URL}/jobDetail/${params.id}`)
+            },
+            {
                 path: '/my-bids',
                 element: <MyBids></MyBids>
             },
@@ -50,11 +55,6 @@ const router = createBrowserRouter([
                 path: '/bid-request',
                 element: <BidRequest></BidRequest>
             },
-            {
-                path: '/update/:id',
-                element: <Update></Update>,
-                loader: ({ params }) => fetch(`${import.meta.env.VITE_API_URL}/update/${params.id}`)
-            }
         ]
     }
 ])
