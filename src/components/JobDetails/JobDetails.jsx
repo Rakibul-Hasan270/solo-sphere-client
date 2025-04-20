@@ -18,7 +18,7 @@ const JobDetails = () => {
 
     const handelFormSubmission = async event => {
         event.preventDefault();
-        // if (user?.email === buyer?.email) return toast.error('action not found');
+        if (user?.email === buyer?.email) return toast.error('action not found');
 
         const form = event.target;
         const jobId = _id;

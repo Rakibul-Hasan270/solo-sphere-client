@@ -9,6 +9,7 @@ import AddJob from "../components/AddJob/AddJob";
 import MyPostedJob from "../components/MyPostedJob/MyPostedJob";
 import MyBids from "../components/MyBids/MyBids";
 import BidRequest from "../components/BidRequest/BidRequest";
+import Update from "../components/Update/Update";
 
 const router = createBrowserRouter([
     {
@@ -49,6 +50,11 @@ const router = createBrowserRouter([
                 path: '/bid-request',
                 element: <BidRequest></BidRequest>
             },
+            {
+                path: '/update/:id',
+                element: <Update></Update>,
+                loader: ({ params }) => fetch(`${import.meta.env.VITE_API_URL}/update/${params.id}`)
+            }
         ]
     }
 ])

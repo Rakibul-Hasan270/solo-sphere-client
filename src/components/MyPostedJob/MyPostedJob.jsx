@@ -1,20 +1,66 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
-import axios from 'axios';
 import { Link } from 'react-router';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import Swal from 'sweetalert2'
 
 const MyPostedJob = () => {
     const { user } = useAuth();
     const [jobs, setJobs] = useState([]);
 
+    // useEffect(() => {
+    //     getData()
+    //   }, [user])
+
+    //   const getData = async () => {
+    //     const { data } = await axios(
+    //       `${import.meta.env.VITE_API_URL}/jobs/${user?.email}`
+    //     )
+    //     setJobs(data)
+    //   }
+
+
     useEffect(() => {
-        const getData = async () => {
-            const data = await axios(`${import.meta.env.VITE_API_URL}/myJob/${user?.email}`);
-        setJobs(data.data);
-        }
         getData();
     }, [user])
+    
+    const getData = async () => {
+        const { data } = await axios(`${import.meta.env.VITE_API_URL}/myJob/${user?.email}`);
+        setJobs(data);
+    }
 
+    const handleDelete = async id => {
+        try {
+            const result = await Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            })
+            if (result.isConfirmed) {
+                await axios.delete(`${import.meta.env.VITE_API_URL}/job/${id}`);
+
+                // click a job state thake delete--> real time a 
+                // setJobs(rkb => rkb.filter(job => job._id !== id));
+                
+                getData()
+                toast.success('job delete');
+
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
+            }
+        }
+        catch (error) {
+            toast.error(error.message);
+        }
+    }
     return (
         <section className='container px-4 mx-auto pt-12'>
             <div className='flex items-center gap-x-3'>
@@ -113,7 +159,7 @@ const MyPostedJob = () => {
                                             <td className='px-4 py-4 text-sm whitespace-nowrap'>
                                                 <div className='flex items-center gap-x-6'>
                                                     <button
-                                                        // onClick={() => handleDelete(job._id)}
+                                                        onClick={() => handleDelete(job._id)}
                                                         className='text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none'
                                                     >
                                                         <svg
