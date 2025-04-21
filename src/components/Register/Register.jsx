@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import logo from '../../assets/images/logo.png';
 import bgImg from '../../assets/images/register.jpg';
 import useAuth from '../../hooks/useAuth';
@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 
 const Register = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { user, setUser, createUser, updateUserProfile, googleSignIn } = useAuth();
 
     const handleSignUp = async event => {
@@ -17,14 +18,15 @@ const Register = () => {
         const email = form.email.value;
         const password = form.password.value;
         // console.log(name, photo, email, password)
-
+        console.log(location)
         try {
-            const result = await createUser(email, password);
-            navigate('/');
+            await createUser(email, password);
+            navigate(location?.state ? location.state : '/');
             // console.log(result)
             updateUserProfile(name, photo);
             setUser({ ...user, displayName: name, photoURL: photo })
             toast.success('Creating user successfully');
+
         } catch (err) {
             toast.error(err?.message);
         }
@@ -33,7 +35,7 @@ const Register = () => {
     const handleGoogleSignIn = async () => {
         try {
             await googleSignIn();
-            navigate('/');
+            navigate(location?.state ? location.state : '/');
             toast.success('Google login Success');
         } catch (err) {
             toast.error(err?.message);

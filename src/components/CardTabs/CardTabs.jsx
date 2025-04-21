@@ -8,7 +8,7 @@ const CardTabs = () => {
     const [cardInfo, setCardInfo] = useState([]);
 
     useEffect(() => {
-        axios(`${import.meta.env.VITE_API_URL}/jobs`)
+        axios.get(`${import.meta.env.VITE_API_URL}/jobs`)
             .then(res => {
                 // console.log(res.data);
                 setCardInfo(res.data);
@@ -19,13 +19,20 @@ const CardTabs = () => {
         <Tabs>
             <div className='flex justify-center items-center mb-12'>
                 <TabList>
+                    <Tab>Graphics Design</Tab>
                     <Tab>Web Development</Tab>
                     <Tab>Digital Marketing</Tab>
-                    <Tab>Graphics Design</Tab>
                 </TabList>
             </div>
 
             <div className='flex justify-center'>
+                <TabPanel>
+                    <div className='grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
+                        {
+                            cardInfo.filter(c => c.category === 'Graphics Design').map(info => <Card key={info._id} info={info}></Card>)
+                        }
+                    </div>
+                </TabPanel>
                 <TabPanel>
                     <div className='grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
                         {
@@ -37,13 +44,6 @@ const CardTabs = () => {
                     <div className='grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
                         {
                             cardInfo.filter(c => c.category === 'Digital Marketing').map(info => <Card key={info._id} info={info}></Card>)
-                        }
-                    </div>
-                </TabPanel>
-                <TabPanel>
-                <div className='grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3'>
-                        {
-                            cardInfo.filter(c => c.category === 'Graphic Design').map(info => <Card key={info._id} info={info}></Card>)
                         }
                     </div>
                 </TabPanel>

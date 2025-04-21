@@ -10,6 +10,7 @@ import MyPostedJob from "../components/MyPostedJob/MyPostedJob";
 import MyBids from "../components/MyBids/MyBids";
 import BidRequest from "../components/BidRequest/BidRequest";
 import Update from "../components/Update/Update";
+import PrivateRouter from "./PrivateRouter";
 
 const router = createBrowserRouter([
     {
@@ -31,29 +32,29 @@ const router = createBrowserRouter([
             },
             {
                 path: '/jobDetail/:id',
-                element: <JobDetails></JobDetails>,
+                element: <PrivateRouter><JobDetails></JobDetails></PrivateRouter>,
                 loader: ({ params }) => fetch(`${import.meta.env.VITE_API_URL}/jobDetail/${params.id}`)
             },
             {
                 path: '/add-job',
-                element: <AddJob></AddJob>
+                element: <PrivateRouter><AddJob></AddJob></PrivateRouter>
             },
             {
                 path: '/my-post-job',
-                element: <MyPostedJob></MyPostedJob>
+                element: <PrivateRouter> <MyPostedJob></MyPostedJob></PrivateRouter>
             },
             {
                 path: '/update/:id',
-                element: <Update></Update>,
+                element: <PrivateRouter><Update></Update></PrivateRouter>,
                 loader: ({ params }) => fetch(`${import.meta.env.VITE_API_URL}/jobDetail/${params.id}`)
             },
             {
                 path: '/my-bids',
-                element: <MyBids></MyBids>
+                element: <PrivateRouter><MyBids></MyBids></PrivateRouter>
             },
             {
                 path: '/bid-request',
-                element: <BidRequest></BidRequest>
+                element: <PrivateRouter><BidRequest></BidRequest></PrivateRouter>
             },
         ]
     }

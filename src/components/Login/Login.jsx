@@ -1,12 +1,21 @@
-import { Link, useNavigate } from "react-router"
+import { Link, useLocation, useNavigate } from "react-router"
 import img from '../../assets/images/logo.png';
 import bgImg from '../../assets/images/login.jpg'
 import useAuth from './../../hooks/useAuth';
 import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 const Login = () => {
     const navigate = useNavigate();
-    const { signInUser } = useAuth();
+    const location = useLocation();
+    const { user, loading, signInUser, googleSignIn } = useAuth();
+
+    useEffect(() => {
+        if (user) {
+            navigate('/')
+        }
+    }, [navigate, user])
+
 
     const handelSignInUser = async event => {
         event.preventDefault();
@@ -16,14 +25,26 @@ const Login = () => {
         // console.log(email, password)
 
         try {
-            const result = await signInUser(email, password);
+            await signInUser(email, password);
             // console.log(result)
             toast.success('Login Successfully');
-            navigate('/');
+            navigate(location?.state ? location.state : '/');
         } catch (err) {
             toast.error(err?.message);
         }
     }
+
+    const handleGoogleSignIn = async () => {
+        try {
+            await googleSignIn();
+            navigate(location?.state ? location.state : '/');
+            toast.success('Google login Success');
+        } catch (err) {
+            toast.error(err?.message);
+        }
+    }
+
+    if (user || loading) return;
 
     return (
         <div className='flex justify-center items-center min-h-[calc(100vh-306px)]'>
@@ -70,7 +91,7 @@ const Login = () => {
                             </svg>
                         </div>
 
-                        <span className='w-5/6 px-4 py-3 font-bold text-center'>
+                        <span onClick={handleGoogleSignIn} className='w-5/6 px-4 py-3 font-bold text-center'>
                             Sign in with Google
                         </span>
                     </div>

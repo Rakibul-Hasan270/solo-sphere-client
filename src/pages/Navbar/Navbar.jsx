@@ -20,7 +20,7 @@ const Navbar = () => {
             <div className='mr-10'>
                 {links}
             </div>
-            <div className="flex-none">
+            <div  className="flex-none">
                 <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                         <div className="w-10 rounded-full">

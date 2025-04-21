@@ -22,9 +22,11 @@ const MyPostedJob = () => {
 
 
     useEffect(() => {
-        getData();
+        if (user?.email) {
+            getData();
+        }
     }, [user])
-    
+
     const getData = async () => {
         const { data } = await axios(`${import.meta.env.VITE_API_URL}/myJob/${user?.email}`);
         setJobs(data);
@@ -46,7 +48,7 @@ const MyPostedJob = () => {
 
                 // click a job state thake delete--> real time a 
                 // setJobs(rkb => rkb.filter(job => job._id !== id));
-                
+
                 getData()
                 toast.success('job delete');
 

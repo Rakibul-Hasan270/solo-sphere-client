@@ -88,8 +88,8 @@ const AddJob = () => {
                                 id='category'
                                 className='border p-2 rounded-md'
                             >
-                                <option value='Web Development'>Web Development</option>
                                 <option value='Graphics Design'>Graphics Design</option>
+                                <option value='Web Development'>Web Development</option>
                                 <option value='Digital Marketing'>Digital Marketing</option>
                             </select>
                         </div>

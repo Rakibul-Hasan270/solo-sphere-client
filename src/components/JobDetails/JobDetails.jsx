@@ -14,7 +14,7 @@ const JobDetails = () => {
     const { user } = useAuth();
     const { category, deadline, description, job_title, max_price, min_price, _id, buyer } = info;
     const [startDate, setStartDate] = useState(new Date());
-    console.log(buyer)
+    // console.log(buyer)
 
     const handelFormSubmission = async event => {
         event.preventDefault();
@@ -31,7 +31,7 @@ const JobDetails = () => {
         // const category = category;
         const status = 'pending';
         // const buyer_email = buyer_email;
-        const bidInfo = { jobId, price, email, deadline, comment, status, category };
+        const bidInfo = { jobId, price, email, deadline, comment, status, category, job_title };
         // console.table(bidInfo)
 
         try {
@@ -39,9 +39,8 @@ const JobDetails = () => {
             toast.success('success transmission to server');
             navigate('/bid-request');
         } catch (error) {
-            toast.error(error?.message,'error happend');
+            toast.error(error?.message, 'error happend');
         }
-        console.log(456)
     }
 
     return (
