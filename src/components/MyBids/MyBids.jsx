@@ -7,7 +7,6 @@ const MyBids = () => {
   const { user } = useAuth();
   const [myBid, setMyBid] = useState([]);
 
-  // 📆 তারিখ ফরম্যাট করার ফাংশন
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
@@ -16,23 +15,27 @@ const MyBids = () => {
     return `${day}-${month}-${year}`;
   };
 
-
   useEffect(() => {
-    const getData = async () => {
-      if (user?.email) {
-        try {
-          const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/myBids/${user.email}`);
-          setMyBid(data);
-          // data.map(c=>console.log(c.status))
-        } catch (error) {
-          toast.error("Error fetching bids:", error?.message);
-        }
-      }
-    };
     getData();
   }, [user]);
 
-  // console.log(myBid);
+  const getData = async () => {
+    if (user?.email) {
+      try {
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/myBids/${user.email}`);
+        setMyBid(data);
+        // data.map(c=>console.log(c.status))
+      } catch (error) {
+        toast.error("Error fetching bids:", error?.message);
+      }
+    }
+  };
+
+  const handleStatus = async id => {
+    const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}/bid-status/${id}`, { status: 'Complete' })
+    console.log(data);
+    getData();
+  }
 
   return (
     <section className='container px-4 mx-auto pt-12'>
@@ -62,9 +65,6 @@ const MyBids = () => {
                 <tbody className='bg-white divide-y divide-gray-200'>
                   {
                     myBid.map(bid =>
-
-                      // console.log(bid.status)
-
                       <tr key={bid._id}>
                         <td className='px-4 py-4 text-sm text-gray-500 whitespace-nowrap'>{bid.job_title}</td>
                         <td className='px-4 py-4 text-sm text-gray-500 whitespace-nowrap'>{formatDate(bid.deadline)}</td>
@@ -75,16 +75,33 @@ const MyBids = () => {
                           </div>
                         </td>
                         <td className='px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap'>
-                          <div className='inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-yellow-100/60 text-yellow-500'>
-                            <span className='h-1.5 w-1.5 rounded-full bg-yellow-500'></span>
+                          <div
+                            className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 ${bid.status === 'Pending' &&
+                              'bg-yellow-100/60 text-yellow-500'
+                              } ${bid.status === 'In Progress' &&
+                              'bg-blue-100/60 text-blue-500'
+                              } ${bid.status === 'Complete' &&
+                              'bg-emerald-100/60 text-emerald-500'
+                              } ${bid.status === 'Rejected' &&
+                              'bg-red-100/60 text-red-500'
+                              }`}
+                          >
+                            <span
+                              className={`h-1.5 w-1.5 rounded-full ${bid.status === 'Pending' && 'bg-yellow-500'
+                                } ${bid.status === 'In Progress' && 'bg-blue-500'
+                                } ${bid.status === 'Complete' && 'bg-green-500'} ${bid.status === 'Complete' && 'bg-green-500'
+                                } ${bid.status === 'Rejected' && 'bg-red-500'} `}
+                            ></span>
                             <h2 className='text-sm font-normal '>{bid.status}</h2>
-                            {/* <h2 className='text-sm font-normal '>pending</h2> */}
                           </div>
                         </td>
                         <td className='px-4 py-4 text-sm whitespace-nowrap'>
+                          {/* Complete Button */}
                           <button
+                            disabled={bid.status !== 'In Progress'}
+                            onClick={() => handleStatus(bid._id)}
                             title='Mark Complete'
-                            className='text-gray-500 transition-colors duration-200 hover:text-red-500 focus:outline-none disabled:cursor-not-allowed'
+                            className='text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none disabled:cursor-not-allowed'
                           >
                             <svg
                               xmlns='http://www.w3.org/2000/svg'
