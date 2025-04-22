@@ -26,7 +26,7 @@ const AddJob = () => {
         // console.table(jobInfo.buyer);
 
         try {
-            axios.post(`${import.meta.env.VITE_API_URL}/addJob`, jobInfo);
+            axios.post(`${import.meta.env.VITE_API_URL}/addJob`, jobInfo, { withCredentials: true });
             toast.success('job added to server');
             navigate('/my-post-job');
         } catch (error) {

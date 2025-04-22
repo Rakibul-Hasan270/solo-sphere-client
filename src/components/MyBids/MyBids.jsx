@@ -22,7 +22,7 @@ const MyBids = () => {
   const getData = async () => {
     if (user?.email) {
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/myBids/${user.email}`);
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/myBids/${user.email}`, { withCredentials: true });
         setMyBid(data);
       } catch (error) {
         toast.error("Error fetching bids:", error?.message);
@@ -31,7 +31,7 @@ const MyBids = () => {
   };
 
   const handleStatus = async id => {
-    const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}/bid-status/${id}`, { status: 'Complete' })
+    const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}/bid-status/${id}`, { status: 'Complete' }, { withCredentials: true })
     console.log(data);
     getData();
   }

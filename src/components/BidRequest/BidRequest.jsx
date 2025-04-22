@@ -9,18 +9,20 @@ const BidRequest = () => {
     const [bids, setBids] = useState([]);
 
     useEffect(() => {
-        getData()
+        if (user?.email) {
+            getData();
+        }
     }, [user])
 
 
     const getData = async () => {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/bidRequest/${user?.email}`)
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/bidRequest/${user?.email}`, { withCredentials: true });
         setBids(data);
     }
 
 
     const handleStatus = async (id, prevStatus, status) => {
-        if(prevStatus === status) return toast.error('already exist');
+        if (prevStatus === status) return toast.error('already exist');
         await axios.patch(`${import.meta.env.VITE_API_URL}/bid-status/${id}`, { status })
         getData()
     }
