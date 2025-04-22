@@ -24,7 +24,6 @@ const MyBids = () => {
       try {
         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/myBids/${user.email}`);
         setMyBid(data);
-        // data.map(c=>console.log(c.status))
       } catch (error) {
         toast.error("Error fetching bids:", error?.message);
       }
