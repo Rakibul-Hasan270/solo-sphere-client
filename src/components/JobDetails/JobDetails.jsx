@@ -31,13 +31,13 @@ const JobDetails = () => {
         // const category = category;
         const status = 'pending';
         // const buyer_email = buyer_email;
-        const bidInfo = { jobId, price, email, deadline, comment, status, category, job_title };
+        const bidInfo = { jobId, price, email, deadline, comment, status, category, job_title, buyer };
         // console.table(bidInfo)
 
         try {
             axios.post(`${import.meta.env.VITE_API_URL}/bid`, bidInfo);
             toast.success('success transmission to server');
-            navigate('/bid-request');
+            navigate('/my-bids');
         } catch (error) {
             toast.error(error?.message, 'error happend');
         }

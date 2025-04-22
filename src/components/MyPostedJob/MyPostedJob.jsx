@@ -46,7 +46,7 @@ const MyPostedJob = () => {
             if (result.isConfirmed) {
                 await axios.delete(`${import.meta.env.VITE_API_URL}/job/${id}`);
 
-                // click a job state thake delete--> real time a 
+                // nicear line a bola hosse, database theke kono update asle take real time a update kora 
                 // setJobs(rkb => rkb.filter(job => job._id !== id));
 
                 getData()
