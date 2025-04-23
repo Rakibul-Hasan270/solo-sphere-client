@@ -1,25 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { Link } from 'react-router';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2'
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const MyPostedJob = () => {
     const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
     const [jobs, setJobs] = useState([]);
-
-    // useEffect(() => {
-    //     getData()
-    //   }, [user])
-
-    //   const getData = async () => {
-    //     const { data } = await axios(
-    //       `${import.meta.env.VITE_API_URL}/jobs/${user?.email}`
-    //     )
-    //     setJobs(data)
-    //   }
-
 
     useEffect(() => {
         if (user?.email) {
@@ -28,7 +17,8 @@ const MyPostedJob = () => {
     }, [user])
 
     const getData = async () => {
-        const { data } = await axios(`${import.meta.env.VITE_API_URL}/myJob/${user?.email}`, { withCredentials: true });
+        // const { data } = await axios(`${import.meta.env.VITE_API_URL}/myJob/${user?.email}`, { withCredentials: true });
+        const { data } = await axiosSecure(`/myJob/${user?.email}`);
         setJobs(data);
     }
 
@@ -44,9 +34,10 @@ const MyPostedJob = () => {
                 confirmButtonText: "Yes, delete it!"
             })
             if (result.isConfirmed) {
-                await axios.delete(`${import.meta.env.VITE_API_URL}/job/${id}`);
+                // await axios.delete(`${import.meta.env.VITE_API_URL}/job/${id}`);
+                await axiosSecure.delete(`/job/${id}`);
 
-                // nicear line a bola hosse, database theke kono update asle take real time a update kora 
+                // only for delete--> ui refresh
                 // setJobs(rkb => rkb.filter(job => job._id !== id));
 
                 getData()
