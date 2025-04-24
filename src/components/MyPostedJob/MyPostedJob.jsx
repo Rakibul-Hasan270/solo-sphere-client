@@ -1,26 +1,46 @@
-import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { Link } from 'react-router';
 import toast from 'react-hot-toast';
 import Swal from 'sweetalert2'
 import useAxiosSecure from '../../hooks/useAxiosSecure';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const MyPostedJob = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
-    const [jobs, setJobs] = useState([]);
 
-    useEffect(() => {
-        if (user?.email) {
-            getData();
-        }
-    }, [user])
+    const queryClient = useQueryClient();
+
+    // const [jobs, setJobs] = useState([]);
+    // useEffect(() => {
+    //     if (user?.email) {
+    //         getData();
+    //     }
+    // }, [user])
 
     const getData = async () => {
-        // const { data } = await axios(`${import.meta.env.VITE_API_URL}/myJob/${user?.email}`, { withCredentials: true });
-        const { data } = await axiosSecure(`/myJob/${user?.email}`);
-        setJobs(data);
+        try {
+            const response = await axiosSecure(`/myJob/${user?.email}`);
+            // console.log("Response:", response);
+            const { data } = response;
+            // setJobs(data);
+            return data;
+        } catch (error) {
+            console.error("Data fetch error:", error);
+            toast.error("Failed to fetch jobs");
+        }
     }
+
+    const { data: jobs = [] } = useQuery({
+        queryFn: () => getData(),
+        queryKey: ['my_job'],
+        enabled: !!user?.email,
+
+        // অটোমেটিক রিফ্রেশ – ডেটা পুরনো হলে TanStack নিজে থেকে রিফেচ করতে পারে (যেমন পেজে ফোকাস আসলে)।
+        // but jamela holo onno func ar refetch kaj korbe na
+        // staleTime: 50000, // 10 সেকেন্ড
+    })
+
 
     const handleDelete = async id => {
         try {
@@ -34,13 +54,14 @@ const MyPostedJob = () => {
                 confirmButtonText: "Yes, delete it!"
             })
             if (result.isConfirmed) {
+                await mutateAsync({ id });
                 // await axios.delete(`${import.meta.env.VITE_API_URL}/job/${id}`);
-                await axiosSecure.delete(`/job/${id}`);
+                // await axiosSecure.delete(`/job/${id}`);
 
-                // only for delete--> ui refresh
-                // setJobs(rkb => rkb.filter(job => job._id !== id));
 
-                getData()
+                // getData()
+                // refetch()
+
                 toast.success('job delete');
 
                 Swal.fire({
@@ -54,6 +75,16 @@ const MyPostedJob = () => {
             toast.error(error.message);
         }
     }
+
+    const { mutateAsync } = useMutation({
+        mutationFn: async ({ id }) => {
+            await axiosSecure.delete(`/job/${id}`);
+        }, onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['my_job'] });
+            toast.success('delete from mutation')
+        }
+    })
+
     return (
         <section className='container px-4 mx-auto pt-12'>
             <div className='flex items-center gap-x-3'>

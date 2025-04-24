@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import useAuth from '../../hooks/useAuth';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const AddJob = () => {
-    const [startDate, setStartDate] = useState(new Date());
     const { user } = useAuth();
     const navigate = useNavigate();
+    const axiosSecure = useAxiosSecure();
+    const [startDate, setStartDate] = useState(new Date());
 
 
     const handelFormSubmission = async event => {
@@ -26,7 +27,7 @@ const AddJob = () => {
         // console.table(jobInfo.buyer);
 
         try {
-            axios.post(`${import.meta.env.VITE_API_URL}/addJob`, jobInfo, { withCredentials: true });
+            axiosSecure.post(`/addJob`, jobInfo);
             toast.success('job added to server');
             navigate('/my-post-job');
         } catch (error) {

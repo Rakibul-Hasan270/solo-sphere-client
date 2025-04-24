@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
-import axios from 'axios';
 import toast from 'react-hot-toast';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
 
 const MyBids = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
   const [myBid, setMyBid] = useState([]);
 
   const formatDate = (dateString) => {
@@ -22,7 +23,7 @@ const MyBids = () => {
   const getData = async () => {
     if (user?.email) {
       try {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/myBids/${user.email}`, { withCredentials: true });
+        const { data } = await axiosSecure(`/myBids/${user.email}`);
         setMyBid(data);
       } catch (error) {
         toast.error("Error fetching bids:", error?.message);
@@ -31,7 +32,7 @@ const MyBids = () => {
   };
 
   const handleStatus = async id => {
-    const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}/bid-status/${id}`, { status: 'Complete' }, { withCredentials: true })
+    const { data } = await axiosSecure.patch(`/bid-status/${id}`, { status: 'Complete' })
     console.log(data);
     getData();
   }

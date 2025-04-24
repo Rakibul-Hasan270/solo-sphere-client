@@ -3,11 +3,12 @@ import useAuth from "../../hooks/useAuth";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useState } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Update = () => {
     const job = useLoaderData();
+    const axiosSecure = useAxiosSecure();
     const { category, deadline, description, job_title, max_price, min_price, _id, buyer } = job;
 
     const [startDate, setStartDate] = useState(new Date(deadline));
@@ -44,10 +45,7 @@ const Update = () => {
         };
 
         try {
-            const { data } = await axios.put(
-                `${import.meta.env.VITE_API_URL}/updateInfo/${_id}`,
-                updateInfo, { withCredentials: true }
-            );
+            const { data } = await axiosSecure.put(`/updateInfo/${_id}`, updateInfo);
             console.log(data);
             toast.success("Job Data Updated Successfully!");
             navigate("/my-post-job");

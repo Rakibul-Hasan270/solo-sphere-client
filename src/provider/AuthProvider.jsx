@@ -71,12 +71,12 @@ const AuthProvider = ({ children }) => {
             try {
                 if (currentUser) {
                     // JWT Token Request
-                    const { data } = await axios.post(
+                    await axios.post(
                         `${import.meta.env.VITE_API_URL}/jwt`,
                         { email: currentUser.email },
                         { withCredentials: true }
                     );
-                    console.log('JWT Token:', data);
+                    // console.log('JWT Token:', data);
                 } else {
                     // Logout API call
                     await axios.get(`${import.meta.env.VITE_API_URL}/logout`, {

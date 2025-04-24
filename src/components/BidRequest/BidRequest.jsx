@@ -1,38 +1,63 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import toast from 'react-hot-toast';
+import useAxiosSecure from '../../hooks/useAxiosSecure';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const BidRequest = () => {
 
     const { user } = useAuth();
-    const [bids, setBids] = useState([]);
+    const axiosSecure = useAxiosSecure();
+    // --> use invalidate queries <-or-> refetch()
+    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        if (user?.email) {
-            getData();
-        }
-    }, [user])
+
+    // const [bids, setBids] = useState([]);
+    // useEffect(() => {
+    //     if (user?.email) {
+    //         getData();
+    //     }
+    // }, [user])
 
 
     const getData = async () => {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/bidRequest/${user?.email}`, { withCredentials: true });
-        setBids(data);
+        // const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/bidRequest/${user?.email}`, { withCredentials: true });
+        const { data } = await axiosSecure(`/bidRequest/${user?.email}`)
+        // setBids(data);
+        return data;
     }
 
+    // only data get operation > useQuery
+    const { data: bids = [] } = useQuery({
+        queryKey: ['get_bid'],
+        queryFn: () => getData(),
+        enabled: !!user?.email
+    })
 
     const handleStatus = async (id, prevStatus, status) => {
         if (prevStatus === status) return toast.error('already exist');
-        await axios.patch(`${import.meta.env.VITE_API_URL}/bid-status/${id}`, { status })
-        getData()
+        // await axios.patch(`${import.meta.env.VITE_API_URL}/bid-status/${id}`, { status })
+        // await axiosSecure.patch(`/bid-status/${id}`, { status })
+        // getData()
+        await mutateAsync({ id, status })
     }
+
+    // data put, patch, delete etc operation > useMutation
+    const { mutateAsync } = useMutation({
+        mutationFn: async ({ id, status }) => {
+            const { data } = await axiosSecure.patch(`/bid-status/${id}`, { status })
+            console.log(data, 'from mutation')
+        }, onSuccess: () => {
+            // conceptual-11_2nd(vid)_31:57second --> details of next line
+            queryClient.invalidateQueries({ queryKey: ['get_bid'] })
+            toast.success('update from mutation');
+        }
+    })
 
 
     return (
         <section className='container px-4 mx-auto pt-12'>
             <div className='flex items-center gap-x-3'>
                 <h2 className='text-lg font-medium text-gray-800 '>Bid Requests</h2>
-
                 <span className='px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full '>
                     {bids.length} Requests
                 </span>

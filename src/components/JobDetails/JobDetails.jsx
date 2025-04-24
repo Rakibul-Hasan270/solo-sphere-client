@@ -14,7 +14,6 @@ const JobDetails = () => {
     const { user } = useAuth();
     const { category, deadline, description, job_title, max_price, min_price, _id, buyer } = info;
     const [startDate, setStartDate] = useState(new Date());
-    // console.log(buyer)
 
     const handelFormSubmission = async event => {
         event.preventDefault();
@@ -35,11 +34,11 @@ const JobDetails = () => {
         // console.table(bidInfo)
 
         try {
-            axios.post(`${import.meta.env.VITE_API_URL}/bid`, bidInfo);
+            await axios.post(`${import.meta.env.VITE_API_URL}/bid`, bidInfo);
             toast.success('success transmission to server');
             navigate('/my-bids');
         } catch (error) {
-            toast.error(error?.message, 'error happend');
+            toast.success(error?.response?.data?.message);
         }
     }
 

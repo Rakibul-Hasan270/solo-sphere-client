@@ -5,7 +5,7 @@ import useAuth from '../../hooks/useAuth';
 
 const Navbar = () => {
 
-    const { logOut } = useAuth();
+    const { user, logOut } = useAuth();
 
     const links = <div className='space-x-10'>
         <NavLink to='/'>Home</NavLink>
@@ -20,13 +20,13 @@ const Navbar = () => {
             <div className='mr-10'>
                 {links}
             </div>
-            <div  className="flex-none">
+            <div className="flex-none">
                 <div className="dropdown dropdown-end">
                     <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                        <div className="w-10 rounded-full">
+                        <div title={user?.email} className="w-10 rounded-full">
                             <img
-                                alt="Tailwind CSS Navbar component"
-                                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                alt={user?.displayName}
+                                src={user?.photoURL} />
                         </div>
                     </div>
                     <ul
