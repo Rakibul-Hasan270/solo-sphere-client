@@ -9,6 +9,7 @@ const Navbar = () => {
 
     const links = <div className='space-x-10'>
         <NavLink to='/'>Home</NavLink>
+        <NavLink to='/allJobs'>All Jobs</NavLink>
         <NavLink to='/signIn'>Login</NavLink>
     </div>
     return (

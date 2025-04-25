@@ -22,7 +22,7 @@ const JobDetails = () => {
         const form = event.target;
         const jobId = _id;
         const price = parseFloat(form.price.value);
-        if (price < parseFloat(min_price) || price > parseFloat(max_price)) return toast.error('pest the valid price range');
+        if (price < parseFloat(min_price) || price > parseFloat(max_price)) return toast.error(`fill up a valid price range ${min_price} to ${max_price}`);
         const email = user?.email;
         const deadline = startDate;
         const comment = form.comment.value;
@@ -39,6 +39,7 @@ const JobDetails = () => {
             navigate('/my-bids');
         } catch (error) {
             toast.success(error?.response?.data?.message);
+            form.reset();
         }
     }
 
@@ -98,6 +99,7 @@ const JobDetails = () => {
                                 id='price'
                                 type='text'
                                 name='price'
+                                required
                                 className='block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md   focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40  focus:outline-none focus:ring'
                             />
                         </div>
