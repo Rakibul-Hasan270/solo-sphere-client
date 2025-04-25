@@ -40,15 +40,19 @@ const AllJobs = () => {
     }, [])
 
     const getData = async () => {
-        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/all-jobs`);
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/all-jobs?page=${currentPage}&size=${itemPerPage}`);
         return data;
     }
-    const { data: jobs = [] } = useQuery({
-        queryKey: ['all_jobs', currentPage],
-        queryFn: () => getData()
+    const { data, isFetching, isPreviousData } = useQuery({
+        queryKey: ['all_jobs', currentPage, itemPerPage],
+        queryFn: () => getData(),
+        keepPreviousData: true,
+        staleTime: 1000 * 30
     })
+    const jobs = data ?? [];
 
     if (!count) return <p className="flex justify-center items-center ">Loading...</p>
+    if (isFetching) return <p>Fetching new page...</p>
     console.log('current page:', currentPage, 'count: ', count)
     return (
         <div className='container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between'>
@@ -95,6 +99,12 @@ const AllJobs = () => {
                     </div>
                     <button className='btn'>Reset</button>
                 </div>
+
+                {/* Loader only when fetching new data */}
+                {isFetching && isPreviousData && (
+                    <p className="text-center mt-8">Loading new jobs...</p>
+                )}
+
                 <div className='grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
                     {
                         jobs.map(job => <Card key={job._id} info={job}></Card>)
